@@ -1,3 +1,9 @@
+/**
+ * The bonus member class that is responsible for holding all the information of a user
+ * @author Milosz A. Wudarczyk
+ * @version v. 1.0.0
+ */
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -116,6 +122,9 @@ public class BonusMember {
         }
     }
 
+    /**
+     * Updates the total amount of points the user has
+     */
     public void updatePoints()
     {
         bonuspoints = bonuspointList.stream().reduce(0, (p, d) -> p + d.getPoints(), Integer::sum);

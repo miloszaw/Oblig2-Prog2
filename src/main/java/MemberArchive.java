@@ -1,3 +1,9 @@
+/**
+ * The member archive class which is responsible for
+ * @author Milosz A. Wudarczyk
+ * @version v. 1.0.0
+ */
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,11 +16,22 @@ public class MemberArchive {
         memberArchive = new ArrayList<BonusMember>();
     }
 
+    /**
+     * Gets the member at the given index
+     * @param index index of the member
+     * @return object of class BonusMember
+     */
     public BonusMember getAt(int index)
     {
         return memberArchive.get(index);
     }
 
+    /**
+     * Finds the total amount of points for a member with the use of their memberNo and their password
+     * @param memberNo memberNo of the member
+     * @param password password of the member
+     * @return total amount of points the user has
+     */
     public int findPoints(int memberNo, String password)
     {
         for(int i = 0; i < memberArchive.size(); i++)
@@ -35,6 +52,13 @@ public class MemberArchive {
         return -1;
     }
 
+    /**
+     * Registers amount of points to a certain user by the member of memberNo
+     * @param memberNo memberNo of the member
+     * @param points amount of points to be registered
+     * @param date date the points were awared
+     * @return true or false depending on the success of the operation
+     */
     public boolean registerPoints(int memberNo, int points, LocalDate date)
     {
         for(int i = 0; i < memberArchive.size(); i++)
@@ -49,11 +73,21 @@ public class MemberArchive {
         return false;
     }
 
+    /**
+     * Adds a new member
+     * @param pers personal information of the user
+     * @param dateEnrolled date which the user was enrolled
+     * @param bonuspoints amount of bonuspoints they start with
+     */
     public void addMember(Personals pers, LocalDate dateEnrolled, int bonuspoints)
     {
         memberArchive.add(new BasicMember(getAvailableNo(), pers, dateEnrolled, bonuspoints));
     }
 
+    /**
+     * Gets a random number between 1 and 1000 that has not yet been taken up as a memberNo
+     * @return random unused number
+     */
     private int getAvailableNo()
     {
         Random rand = new Random();
@@ -79,6 +113,10 @@ public class MemberArchive {
         return -1;
     }
 
+    /**
+     * Checks which members qualify for an upgrade and promptly upgrades them
+     * @param date the date which is to be checked against
+     */
     public void checkMembers(LocalDate date)
     {
         for (int i = 0; i < memberArchive.size(); i++)

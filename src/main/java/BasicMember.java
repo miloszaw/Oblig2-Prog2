@@ -1,5 +1,5 @@
 /**
- *
+ * The basic member class which every user registered begins as
  * @author Milosz A. Wudarczyk
  * @version v. 1.0.0
  */

@@ -1,5 +1,5 @@
 /**
- *
+ * The gold member class which contains an increased point factor for each points registered
  * @author Milosz A. Wudarczyk
  * @version v. 1.0.0
  */
@@ -18,6 +18,11 @@ public class GoldMember extends BonusMember {
         super(memberNo, personals, enrolledDate, bonuspoints, bonuspointList);
     }
 
+    /**
+     * Registers points to be added with a factor of 1.5
+     * @param points amount of points to add
+     * @param date date at which the points were earned
+     */
     @Override
     public void registerPoints(int points, LocalDate date)
     {

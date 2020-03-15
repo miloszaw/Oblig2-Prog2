@@ -13,7 +13,7 @@ public class MemberArchive {
     ArrayList<BonusMember> memberArchive;
     public MemberArchive()
     {
-        memberArchive = new ArrayList<BonusMember>();
+        memberArchive = new ArrayList<>();
     }
 
     /**
@@ -39,7 +39,6 @@ public class MemberArchive {
             if (memberArchive.get(i).getMemberNo() == memberNo)
             {
                 BonusMember m = memberArchive.get(i);
-                i = memberArchive.size();
                 if(m.okPassword(password))
                 {
                     return m.getPoints();
@@ -61,6 +60,7 @@ public class MemberArchive {
      */
     public boolean registerPoints(int memberNo, int points, LocalDate date)
     {
+
         for(int i = 0; i < memberArchive.size(); i++)
         {
             if (memberArchive.get(i).getMemberNo() == memberNo)
@@ -102,11 +102,11 @@ public class MemberArchive {
                 if (m.getMemberNo() == n)
                 {
                     unique = false;
+                    i = memberArchive.size();
                 }
             }
             if (unique)
             {
-                found = true;
                 return n;
             }
         }

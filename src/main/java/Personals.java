@@ -20,6 +20,8 @@ class Personals {
      * @param password the password of the person
      */
     public Personals(String firstname, String surname, String emailAddress, String password) {
+
+        // Checks if all the parameters contains a valid value
         if (firstname == null
                 || surname == null
                 || emailAddress == null

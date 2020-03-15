@@ -15,6 +15,7 @@ class BonusMemberTest {
     private LocalDate testDate;
     private Personals ole;
     private Personals tove;
+    private Personals jon;
 
     @BeforeEach
     void setUp() {
@@ -23,6 +24,53 @@ class BonusMemberTest {
                 "ole.olsen@dot.com", "ole");
         this.tove = new Personals("Hansen", "Tove",
                 "tove.hansen@dot.com", "tove");
+        this.jon = new Personals("Jon", "Jonsen", "jon.jonsen@dot.com", "jon");
+    }
+
+    /**
+     * Tests if exceptions are triggered when they are supposed to
+     */
+    @Test
+    void testException() {
+        // Tests basic member
+        try {
+            BonusMember bm = new BasicMember(103, jon, null, 0);
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+        // Tests silver member
+        try {
+            BonusMember bm = new SilverMember(103, jon, null, 0);
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+
+        // Tests gold member
+        try {
+            BonusMember bm = new GoldMember(103, jon, null, 0);
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+
+        // Tests personals
+        try {
+            Personals martin = new Personals("", "Martinson", null, "martin");
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
+
+        // Tests registering points
+        try {
+            BonusMember bm = new BasicMember(103, jon, testDate, 0);
+            bm.registerPoints(0, null);
+            fail();
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     /**

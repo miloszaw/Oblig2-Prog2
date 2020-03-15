@@ -28,11 +28,18 @@ public class BonusMember {
      */
     public BonusMember(int memberNo, Personals personals, LocalDate enrolledDate, int bonuspoints)
     {
+        // Checks if all the parameters contains a valid value
+        if (memberNo == 0
+                || personals == null
+                || enrolledDate == null) {
+            throw new IllegalArgumentException("One or more of the parameters are invalid.");
+        }
         this.memberNo = memberNo;
         this.personals = personals;
         this.enrolledDate = enrolledDate;
         this.bonuspoints = bonuspoints;
-        bonuspointList = new ArrayList<Points>();
+        bonuspointList = new ArrayList<>();
+
     }
 
     public BonusMember(int memberNo, Personals personals, LocalDate enrolledDate, int bonuspoints, ArrayList<Points> bonuspointList)
@@ -88,10 +95,8 @@ public class BonusMember {
     public int findQualificationPoints(LocalDate date)
     {
         int points = 0;
-        for (int i = 0; i < bonuspointList.size(); i++)
-        {
-            Points p = bonuspointList.get(i);
-            if (ChronoUnit.DAYS.between( p.getDate(), date) < 365) // checks amount of days between the given date and the date the points were registered on
+        for (Points p : bonuspointList) {
+            if (ChronoUnit.DAYS.between(p.getDate(), date) < 365) // checks amount of days between the given date and the date the points were registered on
             {
                 points += p.getPoints();
             }
@@ -113,13 +118,16 @@ public class BonusMember {
      * Registers points
      * @param points amount of points to add
      */
-    public void registerPoints(int points, LocalDate date)
-    {
-        if (points > 0 && points == Math.floor(points)) // Checks if point value is valid, greater than 0 and not a double / decimal value
-        {
-            bonuspointList.add(new Points(points, date));
-            updatePoints();
+    public void registerPoints(int points, LocalDate date) {
+        // Checks if all the parameters contains a valid value
+        if (memberNo == 0
+                || points < 1
+                || date == null
+                || points != Math.floor(points)) {
+            throw new IllegalArgumentException("One or more of the parameters are invalid.");
         }
+        bonuspointList.add(new Points(points, date));
+        updatePoints();
     }
 
     /**

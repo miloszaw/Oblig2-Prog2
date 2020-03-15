@@ -10,5 +10,6 @@ public class BasicMember extends BonusMember {
 
     public BasicMember(int memberNo, Personals personals, LocalDate enrolledDate, int bonuspoints) {
         super(memberNo, personals, enrolledDate, bonuspoints);
+
     }
 }

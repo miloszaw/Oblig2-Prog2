@@ -6,6 +6,7 @@
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class MemberArchive {
@@ -18,23 +19,27 @@ public class MemberArchive {
 
     /**
      * Gets the member at the given index
+     *
      * @param index index of the member
      * @return object of class BonusMember
      */
-    public BonusMember getAt(int index)
-    {
+    public BonusMember getAt(int index) {
         return memberArchive.get(index);
+    }
+
+    public int getSize() {
+        return memberArchive.size();
     }
 
     /**
      * Finds the total amount of points for a member with the use of their memberNo and their password
+     *
      * @param memberNo memberNo of the member
      * @param password password of the member
      * @return total amount of points the user has
      */
-    public int findPoints(int memberNo, String password)
-    {
-        for(int i = 0; i < memberArchive.size(); i++)
+    public int findPoints(int memberNo, String password) {
+        for (int i = 0; i < memberArchive.size(); i++)
         {
             if (memberArchive.get(i).getMemberNo() == memberNo)
             {
@@ -61,14 +66,13 @@ public class MemberArchive {
     public boolean registerPoints(int memberNo, int points, LocalDate date)
     {
 
-        for(int i = 0; i < memberArchive.size(); i++)
-        {
+        for(int i = 0; i < memberArchive.size(); i++) {
             if (memberArchive.get(i).getMemberNo() == memberNo)
-            {
-                BonusMember m = memberArchive.get(i);
-                i = memberArchive.size();
-                m.registerPoints(points, date);
-            }
+                if (memberArchive.get(i).getMemberNo() == memberNo) {
+                    BonusMember m = memberArchive.get(i);
+                    i = memberArchive.size();
+                    m.registerPoints(points, date);
+                }
         }
         return false;
     }
@@ -114,36 +118,67 @@ public class MemberArchive {
     }
 
     /**
-     * Checks which members qualify for an upgrade and promptly upgrades them
+     * Checks which members qualify for an upgrade
+     *
      * @param date the date which is to be checked against
      */
-    public void checkMembers(LocalDate date)
-    {
-        for (int i = 0; i < memberArchive.size(); i++)
-        {
+    public ArrayList<BonusMember> checkMembers(LocalDate date) {
+
+        ArrayList<BonusMember> qualifyingMembers = new ArrayList<>();
+
+        for (int i = 0; i < memberArchive.size(); i++) {
             BonusMember m = memberArchive.get(i);
-            if(m instanceof BasicMember)
-            {
-                if (m.findQualificationPoints(date) >= 75000)
-                {
-                    GoldMember newM = new GoldMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
-                    memberArchive.set(i, newM);
+            if (m instanceof BasicMember) {
+                if (m.findQualificationPoints(date) >= 75000) {
+                    qualifyingMembers.add(m);
+                    //GoldMember newM = new GoldMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
+                    //memberArchive.set(i, newM);
+                } else if (m.findQualificationPoints(date) >= 25000) {
+                    qualifyingMembers.add(m);
+                    //SilverMember newM = new SilverMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
+                    //memberArchive.set(i, newM);
                 }
-                else if (m.findQualificationPoints(date) >= 25000)
-                {
-                    SilverMember newM = new SilverMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
-                    memberArchive.set(i, newM);
-                }
-            }
-            else if (m instanceof SilverMember)
-            {
-                if (m.findQualificationPoints(date) >= 75000)
-                {
-                    GoldMember newM = new GoldMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
-                    memberArchive.set(i, newM);
+            } else if (m instanceof SilverMember) {
+                if (m.findQualificationPoints(date) >= 75000) {
+                    qualifyingMembers.add(m);
+                    //GoldMember newM = new GoldMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
+                    //memberArchive.set(i, newM);
                 }
             }
         }
+
+        return qualifyingMembers;
+    }
+
+    /**
+     * Upgrades the members which are provided to a higher rank
+     *
+     * @param m member to be upgraded
+     */
+    public void upgradeMembers(BonusMember m) {
+        if (m instanceof SilverMember) {
+            GoldMember newM = new GoldMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
+            memberArchive.set(getIndex(m), newM);
+        } else if (m instanceof BasicMember) {
+            SilverMember newM = new SilverMember(m.getMemberNo(), m.getPersonals(), m.getEnrolledDate(), m.getPoints(), m.getBonuspointList());
+            memberArchive.set(getIndex(m), newM);
+        }
+
+    }
+
+    public int getIndex(BonusMember m1) {
+        int i = 0;
+        for (BonusMember m2 : memberArchive) {
+            if (m2.equals(m1)) {
+                return i;
+            }
+            i++;
+        }
+        return 0;
+    }
+
+    public void deleteMember(int index) {
+        memberArchive.remove(index);
     }
 
 }

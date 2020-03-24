@@ -31,7 +31,8 @@ public class BonusMember {
         // Checks if all the parameters contains a valid value
         if (memberNo == 0
                 || personals == null
-                || enrolledDate == null) {
+                || enrolledDate == null
+                || bonuspoints < 0) {
             throw new IllegalArgumentException("One or more of the parameters are invalid.");
         }
         this.memberNo = memberNo;
@@ -39,11 +40,21 @@ public class BonusMember {
         this.enrolledDate = enrolledDate;
         this.bonuspoints = bonuspoints;
         bonuspointList = new ArrayList<>();
+        if (bonuspoints > 0) {
+            bonuspointList.add(new Points(bonuspoints, LocalDate.now()));
+        }
 
     }
 
-    public BonusMember(int memberNo, Personals personals, LocalDate enrolledDate, int bonuspoints, ArrayList<Points> bonuspointList)
-    {
+    /**
+     * Constructor for the class of BonusMember, used when a member is upgraded to a higher level
+     *
+     * @param memberNo     the ID of a member given at random
+     * @param personals    an object of class personals which describes the member. Name, password etc.
+     * @param enrolledDate the date at which the member was created
+     * @param bonuspoints  amount of points the member begins with
+     */
+    public BonusMember(int memberNo, Personals personals, LocalDate enrolledDate, int bonuspoints, ArrayList<Points> bonuspointList) {
         this.memberNo = memberNo;
         this.personals = personals;
         this.enrolledDate = enrolledDate;

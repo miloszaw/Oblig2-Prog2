@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -57,6 +59,24 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Populates the member archive with some example members.
+     * Used for testing and debugging
+     */
+    public void populateMembers() {
+        // Basic silver
+        for (int i = 0; i < 4; i++) {
+            members.addMember(new Personals("Name" + i, "Surname" + i, "email" + i, "password" + i), LocalDate.now(), 0);
+        }
+        // Basic member qualifying for silver
+        for (int i = 0; i < 3; i++) {
+            members.addMember(new Personals("NameS" + i, "SurnameS" + i, "emailS" + i, "passwordS" + i), LocalDate.now(), 30000);
+        }
+        // Basic member qualifying for silver and gold
+        for (int i = 0; i < 4; i++) {
+            members.addMember(new Personals("NameG" + i, "SurnameG" + i, "emailG" + i, "passwordG" + i), LocalDate.now(), 75000);
+        }
+    }
 
     // Main scene variables
     VBox mainContainer = new VBox();
@@ -88,23 +108,6 @@ public class GUI extends Application {
     }
 
     /**
-     * A method which updates the contents of the table present on the main scene.
-     * This is executed whenever a change (such as deletion) occurs in the application
-     */
-    public void updateMainScene() {
-
-        // Clears all users from the table view
-        memberList.getItems().clear();
-
-        // Fills table view up with bonus members in the member archive
-        for (int i = 0; i < members.getSize(); i++) {
-            memberList.getItems().add(members.getAt(i));
-        }
-        mainContainer.getChildren().set(0, memberList);
-
-    }
-
-    /**
      * Sets up the table view visible in the main scene which features all the bonus members
      *
      * @return a table view object
@@ -114,6 +117,9 @@ public class GUI extends Application {
         // Sets up info columns
         TableColumn column1 = new TableColumn<>("Member number");
         column1.setCellValueFactory(new PropertyValueFactory<>("memberNo"));
+
+        TableColumn column2 = new TableColumn<>("Full name");
+        column2.setCellValueFactory((Callback<TableColumn.CellDataFeatures<BonusMember, String>, ObservableValue<String>>) m -> new SimpleStringProperty(m.getValue().getPersonals().getFullname()));
 
         // Sets up the details button
         TableColumn detailsCol = new TableColumn("");
@@ -190,28 +196,26 @@ public class GUI extends Application {
         deleteCol.setCellFactory(cellFactory2);
 
         // Adds elements to the table view
-        memberList.getColumns().addAll(column1, detailsCol, deleteCol);
+        memberList.getColumns().addAll(column1, column2, detailsCol, deleteCol);
 
         return memberList;
     }
 
     /**
-     * Populates the member archive with some example members.
-     * Used for testing and debugging
+     * A method which updates the contents of the table present on the main scene.
+     * This is executed whenever a change (such as deletion) occurs in the application
      */
-    public void populateMembers() {
-        // Basic silver
-        for (int i = 0; i < 4; i++) {
-            members.addMember(new Personals("Name" + i, "Surname" + i, "email" + i, "password" + i), LocalDate.now(), 0);
+    public void updateMainScene() {
+
+        // Clears all users from the table view
+        memberList.getItems().clear();
+
+        // Fills table view up with bonus members in the member archive
+        for (int i = 0; i < members.getSize(); i++) {
+            memberList.getItems().add(members.getAt(i));
         }
-        // Basic member qualifying for silver
-        for (int i = 0; i < 3; i++) {
-            members.addMember(new Personals("NameS" + i, "SurnameS" + i, "emailS" + i, "passwordS" + i), LocalDate.now(), 30000);
-        }
-        // Basic member qualifying for silver and gold
-        for (int i = 0; i < 4; i++) {
-            members.addMember(new Personals("NameG" + i, "SurnameG" + i, "emailG" + i, "passwordG" + i), LocalDate.now(), 75000);
-        }
+        mainContainer.getChildren().set(0, memberList);
+
     }
 
     /**
@@ -391,24 +395,6 @@ public class GUI extends Application {
     }
 
     /**
-     * A method which updates the contents of the table present on the upgrade scene.
-     * This is executed whenever a user is upgraded or when checking who qualifies
-     */
-    private void updateUpgradeScene() {
-        // Makes a list of qualifying members as of today
-        ArrayList<BonusMember> result = members.checkMembers(LocalDate.now());
-
-        // Clears the table view
-        qualifyingList.getItems().clear();
-
-        // Fills the table view with qualifying members
-        for (int i = 0; i < result.size(); i++) {
-            qualifyingList.getItems().add(result.get(i));
-        }
-        upgradeContainer.getChildren().set(2, qualifyingList);
-    }
-
-    /**
      * Sets up the table view which contains all the users that qualify for an upgrade
      *
      * @return a table view object
@@ -419,8 +405,10 @@ public class GUI extends Application {
         // Sets up info columns
         TableColumn column1 = new TableColumn<>("Member number");
         column1.setCellValueFactory(new PropertyValueFactory<>("memberNo"));
-        TableColumn column2 = new TableColumn<>("Enrolled date");
-        column2.setCellValueFactory(new PropertyValueFactory<>("enrolledDate"));
+        TableColumn column2 = new TableColumn<>("Full name");
+        column2.setCellValueFactory((Callback<TableColumn.CellDataFeatures<BonusMember, String>, ObservableValue<String>>) m -> new SimpleStringProperty(m.getValue().getPersonals().getFullname()));
+        TableColumn column3 = new TableColumn<>("Enrolle d date");
+        column3.setCellValueFactory(new PropertyValueFactory<>("enrolledDate"));
 
         // Sets up the details button
         TableColumn detailsCol = new TableColumn("");
@@ -497,9 +485,27 @@ public class GUI extends Application {
         upgradeCol.setCellFactory(cellFactory2);
 
         // Adds elements to the table view
-        qualifyingList.getColumns().addAll(column1, column2, detailsCol, upgradeCol);
+        qualifyingList.getColumns().addAll(column1, column2, column3, detailsCol, upgradeCol);
 
         return qualifyingList;
+    }
+
+    /**
+     * A method which updates the contents of the table present on the upgrade scene.
+     * This is executed whenever a user is upgraded or when checking who qualifies
+     */
+    private void updateUpgradeScene() {
+        // Makes a list of qualifying members as of today
+        ArrayList<BonusMember> result = members.checkMembers(LocalDate.now());
+
+        // Clears the table view
+        qualifyingList.getItems().clear();
+
+        // Fills the table view with qualifying members
+        for (int i = 0; i < result.size(); i++) {
+            qualifyingList.getItems().add(result.get(i));
+        }
+        upgradeContainer.getChildren().set(2, qualifyingList);
     }
 
     // Text fields for detail container

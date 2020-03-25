@@ -45,6 +45,7 @@ class Personals {
     public String getFirstname() {
         return firstname;
     }
+
     /**
      * Returns the persons surname.
      *
@@ -53,6 +54,14 @@ class Personals {
     public String getSurname() {
         return surname;
     }
+
+    /**
+     *
+     */
+    public String getFullname() {
+        return firstname + " " + surname;
+    }
+
     /**
      * Returns the persons e-mail address.
      *
@@ -61,6 +70,7 @@ class Personals {
     public String getEMailAddress() {
         return emailAddress;
     }
+
     /**
      IDATG2001 PROGRAMMERING 2
      OBLIG 2: Arv og polymorfi
